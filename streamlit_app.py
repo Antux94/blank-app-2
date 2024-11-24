@@ -25,3 +25,11 @@ print("Versión de Maven:", version_maven)
 comando_java = ['java', '-version']
 version_java = ejecutar_comando(comando_java)
 print("Versión de Java:", version_java)
+
+
+st.write(
+    version_maven
+)
+st.write(
+    version_java
+)
