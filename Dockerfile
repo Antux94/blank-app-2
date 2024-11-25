@@ -1,8 +1,11 @@
 FROM python:3.11
 
-COPY app.py app.py
+WORKDIR /app
 
-RUN pip3 install streamlit
+COPY requirements.txt ./
+RUN pip install --no-cache-dir -r requirements.txt
+
+COPY . .
 
 # Instalar Java 11
 RUN wget https://download.java.net/java/GA/jdk11/9/GPL/openjdk-11.0.2_linux-x64_bin.tar.gz && \
@@ -25,4 +28,6 @@ ENV M2_HOME /opt/maven
 ENV MAVEN_HOME /opt/maven
 ENV PATH $JAVA_HOME/bin:$M2_HOME/bin:$PATH
 
-ENTRYPOINT ["streamlit", "run", "app.py", "--server.port=80", "--server.address=0.0.0.0"]
+EXPOSE 8000
+
+ENTRYPOINT ["streamlit", "run", "app.py", "--server.port=8000", "--server.address=0.0.0.0"]

@@ -2,6 +2,7 @@ import streamlit as st
 import subprocess
 from streamlit_option_menu import option_menu
 import streamlit.components.v1 as components
+import os
 
 # Configuracion modo amplio
 st.set_page_config(layout="wide")
@@ -236,7 +237,7 @@ particles_js = """<!DOCTYPE html>
 if selected == "Inicio":
 
     # Cargar el contenido del archivo SVG
-    svg_path = "assets/logobbva.svg"
+    svg_path = "/app/assets/logobbva.svg"
 
     with open(svg_path, "r") as file:
         svg_example = file.read()
@@ -254,6 +255,55 @@ if selected == "Inicio":
 
     if st.session_state.show_animation:
         components.html(particles_js, height=370, scrolling=True)
+
+
+
+
+    # Obtener la ubicación actual
+    ubicacion_actual = os.getcwd()
+
+    # Imprimir la ubicación actual
+    print("Directorio actual:" + str(ubicacion_actual))
+
+    st.text("Directorio actual:" + str(ubicacion_actual))
+
+
+
+
+    # Cambiar de carpeta a 'app/riskadmissionscalculateincomesv0'
+    os.chdir('/app/riskadmissionscalculateincomesv0')
+
+    # Verificar la ubicación actual
+    print("Directorio actual:" + str(ubicacion_actual))
+
+    ubicacion_actual = os.getcwd()
+
+    st.text("Directorio actual:" + str(ubicacion_actual))
+
+
+
+
+    def ejecutar_comando_maven(comando):
+        try:
+            resultado = subprocess.check_output(comando, stderr=subprocess.STDOUT).decode("utf-8")
+            return resultado
+        except subprocess.CalledProcessError as e:
+            return f"Error al ejecutar {' '.join(comando)}: {e.output.decode('utf-8')}"
+        except FileNotFoundError:
+            return f"El comando {' '.join(comando)} no se encuentra en el PATH."
+
+
+    # Crear un botón en Streamlit para ejecutar el comando
+    if st.button('Ejecutar mvn clean install'):
+        comando_maven = ['mvn', 'clean', 'install']
+        salida1 = ejecutar_comando_maven(comando_maven)
+
+        # Mostrar la salida línea por línea en Streamlit
+        for linea in salida1.splitlines():
+            st.text(linea)
+
+
+
 
 
 
