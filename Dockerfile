@@ -1,4 +1,8 @@
-FROM mcr.microsoft.com/devcontainers/python:1-3.11-bullseye
+FROM python:3.11
+
+COPY app.py app.py
+
+RUN pip3 install streamlit
 
 # Instalar Java 11
 RUN wget https://download.java.net/java/GA/jdk11/9/GPL/openjdk-11.0.2_linux-x64_bin.tar.gz && \
@@ -21,8 +25,4 @@ ENV M2_HOME /opt/maven
 ENV MAVEN_HOME /opt/maven
 ENV PATH $JAVA_HOME/bin:$M2_HOME/bin:$PATH
 
-# Instalar Streamlit
-RUN pip3 install streamlit
-
-# Configuración final
-WORKDIR /workspace
+ENTRYPOINT ["streamlit", "run", "app.py", "--server.port=80", "--server.address=0.0.0.0"]
